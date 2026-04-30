@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="filename" content="index.html" />
+  <title>Atelier — Одежда на заказ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+          },
+          colors: {
+            beige: {
+              50:  '#faf7f2',
+              100: '#f5efe3',
+              200: '#ecddc8',
+              300: '#dfc9a8',
+              400: '#cfb080',
+              500: '#c09a60',
+              600: '#a8804a',
+              700: '#8a673c',
+              800: '#6e5130',
+              900: '#573f25',
+            },
+            ink: {
+              900: '#0d0d0d',
+              800: '#1a1a1a',
+              700: '#2a2a2a',
+              600: '#3d3d3d',
+              500: '#5a5a5a',
+              400: '#7a7a7a',
+              300: '#9a9a9a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background-color: #0d0d0d; color: #f5efe3; overflow-x: hidden; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #1a1a1a; }
+    ::-webkit-scrollbar-thumb { background: #c09a60; border-radius: 3px; }
+
+    /* Nav */
+    .nav-link { position: relative; }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: #c09a60;
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after { width: 100%; }
+
+    /* Hero gradient */
+    .hero-overlay {
+      background: linear-gradient(to right, rgba(13,13,13,0.92) 40%, rgba(13,13,13,0.4) 100%);
+    }
+
+    /* Section divider */
+    .divider-line {
+      width: 60px; height: 2px;
+      background: linear-gradient(90deg, #c09a60, #dfc9a8);
+      border-radius: 2px;
+    }
+
+    /* Cards */
+    .service-card {
+      background: linear-gradient(135deg, #1a1a1a 0%, #141414 100%);
+      border: 1px solid #2a2a2a;
+      transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .service-card:hover {
+      border-color: #c09a60;
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(192,154,96,0.12);
+    }
+
+    /* Portfolio item */
+    .portfolio-item { overflow: hidden; position: relative; }
+    .portfolio-item img {
+      transition: transform 0.6s ease;
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .portfolio-item:hover img { transform: scale(1.07); }
+    .portfolio-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(13,13,13,0.85) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      display: flex; align-items: flex-end; padding: 24px;
+    }
+    .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+
+    /* Steps */
+    .step-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem;
+      line-height: 1;
+      color: #2a2a2a;
+      position: absolute;
+      top: -16px; left: -8px;
+      user-select: none;
+    }
+
+    /* Testimonial card */
+    .testimonial-card {
+      background: linear-gradient(135deg, #1a1a1a 0%, #141414 100%);
+      border: 1px solid #2a2a2a;
+      transition: border-color 0.4s ease;
+    }
+    .testimonial-card:hover { border-color: #c09a60; }
+
+    /* CTA Section */
+    .cta-section {
+      background: linear-gradient(135deg, #1a1610 0%, #0d0d0d 50%, #1a1610 100%);
+      border-top: 1px solid #2a2a2a;
+      border-bottom: 1px solid #2a2a2a;
+    }
+
+    /* Gold button */
+    .btn-gold {
+      background: linear-gradient(135deg, #c09a60 0%, #dfc9a8 50%, #c09a60 100%);
+      background-size: 200% auto;
+      color: #0d0d0d;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      transition: background-position 0.4s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    }
+    .btn-gold:hover {
+      background-position: right center;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(192,154,96,0.4);
+    }
+
+    /* Outline button */
+    .btn-outline {
+      border: 1px solid #c09a60;
+      color: #c09a60;
+      background: transparent;
+      transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
+    }
+    .btn-outline:hover {
+      background: rgba(192,154,96,0.1);
+      transform: translateY(-2px);
+    }
+
+    /* Fabric pattern accent */
+    .fabric-accent {
+      background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 2px,
+        rgba(192,154,96,0.03) 2px,
+        rgba(192,154,96,0.03) 4px
+      );
+    }
+
+    /* Stats */
+    .stat-item { border-right: 1px solid #2a2a2a; }
+    .stat-item:last-child { border-right: none; }
+
+    /* Input */
+    .form-input {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      color: #f5efe3;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: #c09a60;
+      box-shadow: 0 0 0 3px rgba(192,154,96,0.1);
+    }
+    .form-input::placeholder { color: #5a5a5a; }
+
+    /* Animate on scroll */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Nav sticky */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      transition: background 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease;
+    }
+    .navbar.scrolled {
+      background: rgba(13,13,13,0.92);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 1px 0 rgba(192,154,96,0.15);
+    }
+
+    /* Tag badge */
+    .tag-badge {
+      background: rgba(192,154,96,0.1);
+      border: 1px solid rgba(192,154,96,0.25);
+      color: #c09a60;
+    }
+
+    /* Mobile menu */
+    .mobile-menu {
+      background: rgba(13,13,13,0.97);
+      backdrop-filter: blur(24px);
+    }
+
+    /* Marquee */
+    .marquee-track {
+      display: flex;
+      white-space: nowrap;
+      animation: marquee 22s linear infinite;
+    }
+    @keyframes marquee {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Zigzag separator */
+    .zigzag {
+      background:
+        linear-gradient(135deg, #0d0d0d 25%, transparent 25%) -12px 0,
+        linear-gradient(225deg, #0d0d0d 25%, transparent 25%) -12px 0,
+        linear-gradient(315deg, #0d0d0d 25%, transparent 25%),
+        linear-gradient(45deg,  #0d0d0d 25%, transparent 25%);
+      background-size: 24px 12px;
+      background-color: #1a1a1a;
+      height: 12px;
+    }
+  </style>
+</head>
+<body class="bg-ink-900">
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav class="navbar" id="navbar">
+    <div class="max-w-[1440px] mx-auto px-8 lg:px-16 h-18 flex items-center justify-between py-5">
+      <!-- Logo -->
+      <a href="#hero" class="flex items-center gap-3 group">
+        <div class="w-8 h-8 border border-beige-500 rotate-45 flex items-center justify-center">
+          <div class="w-2 h-2 bg-beige-500 rotate-45"></div>
+        </div>
+        <span class="font-serif text-xl text-beige-100 tracking-widest uppercase group-hover:text-beige-400 transition-colors">Atelier</span>
+      </a>
+
+      <!-- Desktop nav -->
+      <ul class="hidden lg:flex items-center gap-10">
+        <li><a href="#services" class="nav-link text-sm text-ink-300 hover:text-beige-200 transition-colors tracking-wide">Услуги</a></li>
+        <li><a href="#portfolio" class="nav-link text-sm text-ink-300 hover:text-beige-200 transition-colors tracking-wide">Работы</a></li>
+        <li><a href="#process" class="nav-link text-sm text-ink-300 hover:text-beige-200 transition-colors tracking-wide">Как это работает</a></li>
+        <li><a href="#testimonials" class="nav-link text-sm text-ink-300 hover:text-beige-200 transition-colors tracking-wide">Отзывы</a></li>
+      </ul>
+
+      <!-- CTA -->
+      <div class="hidden lg:flex items-center gap-4">
+        <a href="#contact" class="btn-gold px-6 py-2.5 rounded-full text-sm font-semibold tracking-wide cursor-pointer">Заказать</a>
+      </div>
+
+      <!-- Mobile burger -->
+      <button id="mobile-menu-btn" class="lg:hidden flex flex-col gap-1.5 p-2" aria-label="Меню">
+        <span class="w-6 h-px bg-beige-200 block transition-all" id="burger-line-1"></span>
+        <span class="w-6 h-px bg-beige-200 block transition-all" id="burger-line-2"></span>
+        <span class="w-4 h-px bg-beige-200 block transition-all self-end" id="burger-line-3"></span>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div class="mobile-menu hidden lg:hidden" id="mobile-menu">
+      <div class="max-w-[1440px] mx-auto px-8 py-8 flex flex-col gap-6">
+        <a href="#services" class="mobile-nav-link text-lg text-beige-100 tracking-wide border-b border-ink-700 pb-4">Услуги</a>
+        <a href="#portfolio" class="mobile-nav-link text-lg text-beige-100 tracking-wide border-b border-ink-700 pb-4">Работы</a>
+        <a href="#process" class="mobile-nav-link text-lg text-beige-100 tracking-wide border-b border-ink-700 pb-4">Как это работает</a>
+        <a href="#testimonials" class="mobile-nav-link text-lg text-beige-100 tracking-wide pb-4">Отзывы</a>
+        <a href="#contact" class="btn-gold px-6 py-3 rounded-full text-sm font-semibold tracking-wide text-center mt-2">Заказать</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section id="hero" class="relative min-h-screen flex items-center overflow-hidden">
+    <!-- Background image -->
+    <div class="absolute inset-0">
+      <img
+        src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1920&q=85&fit=crop"
+        alt="Fashion atelier background"
+        class="w-full h-full object-cover object-center"
+        loading="eager"
+      />
+      <div class="hero-overlay absolute inset-0"></div>
+      <div class="absolute inset-0 fabric-accent"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="relative z-10 max-w-[1440px] mx-auto px-8 lg:px-16 w-full pt-24 pb-20">
+      <div class="max-w-2xl">
+        <!-- Badge -->
+        <div class="inline-flex items-center gap-2 tag-badge px-4 py-2 rounded-full text-xs tracking-widest uppercase mb-8 fade-up">
+          <i data-lucide="scissors" class="w-3 h-3"></i>
+          Индивидуальный пошив
+        </div>
+
+        <!-- Headline -->
+        <h1 class="font-serif text-5xl lg:text-7xl xl:text-8xl leading-[1.05] text-beige-50 mb-6 fade-up" style="transition-delay: 0.1s">
+          Одежда,<br />
+          <em class="text-beige-400 not-italic">созданная</em><br />
+          для вас
+        </h1>
+
+        <!-- Subtext -->
+        <p class="text-ink-300 text-lg lg:text-xl leading-relaxed mb-10 max-w-lg fade-up" style="transition-delay: 0.2s">
+          Каждое изделие шьётся вручную с учётом вашей фигуры, стиля и пожеланий. Никакой массовости — только уникальные вещи.
+        </p>
+
+        <!-- Buttons -->
+        <div class="flex flex-wrap items-center gap-4 fade-up" style="transition-delay: 0.3s">
+          <a href="#contact" class="btn-gold px-8 py-4 rounded-full text-base font-semibold tracking-wide cursor-pointer">
+            Заказать изделие
+          </a>
+          <a href="#portfolio" class="btn-outline px-8 py-4 rounded-full text-base font-semibold tracking-wide cursor-pointer flex items-center gap-2">
+            Смотреть работы
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Scroll hint -->
+      <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 fade-up" style="transition-delay:0.5s">
+        <span class="text-ink-400 text-xs tracking-widest uppercase">Листайте</span>
+        <div class="w-px h-12 bg-gradient-to-b from-beige-500 to-transparent"></div>
+      </div>
+    </div>
+
+    <!-- Floating stats card -->
+    <div class="absolute bottom-16 right-16 hidden xl:block fade-up" style="transition-delay:0.4s">
+      <div class="bg-ink-800 bg-opacity-80 backdrop-blur-xl border border-ink-700 rounded-2xl p-6 flex gap-8">
+        <div class="text-center stat-item pr-8">
+          <div class="font-serif text-3xl text-beige-400">200+</div>
+          <div class="text-ink-400 text-xs tracking-wide mt-1">Довольных клиентов</div>
+        </div>
+        <div class="text-center stat-item pr-8">
+          <div class="font-serif text-3xl text-beige-400">5+</div>
+          <div class="text-ink-400 text-xs tracking-wide mt-1">Лет опыта</div>
+        </div>
+        <div class="text-center">
+          <div class="font-serif text-3xl text-beige-400">100%</div>
+          <div class="text-ink-400 text-xs tracking-wide mt-1">Ручная работа</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MARQUEE ===== -->
+  <div class="overflow-hidden bg-beige-600 py-3">
+    <div class="marquee-track">
+      <span class="inline-flex items-center gap-6 text-ink-900 text-xs font-semibold tracking-widest uppercase px-6" id="marquee-content">
+        <!-- Filled via JS -->
+      </span>
+      <span class="inline-flex items-center gap-6 text-ink-900 text-xs font-semibold tracking-widest uppercase px-6" id="marquee-content-2">
+        <!-- Filled via JS -->
+      </span>
+    </div>
+  </div>
+
+  <!-- ===== ABOUT ===== -->
+  <section id="about" class="py-28 max-w-[1440px] mx-auto px-8 lg:px-16">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <!-- Image column -->
+      <div class="relative fade-up">
+        <div class="relative z-10 rounded-2xl overflow-hidden aspect-[4/5]">
+          <img
+            src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=800&q=80&fit=crop"
+            alt="Швея за работой"
+            class="w-full h-full object-cover"
+          />
+          <!-- Gold frame accent -->
+          <div class="absolute inset-0 border border-beige-600 rounded-2xl pointer-events-none opacity-30"></div>
+        </div>
+        <!-- Decorative offset frame -->
+        <div class="absolute -bottom-4 -right-4 w-full h-full border border-beige-600 rounded-2xl opacity-20 z-0"></div>
+        <!-- Experience badge -->
+        <div class="absolute -bottom-6 -left-6 bg-beige-600 rounded-2xl p-5 shadow-2xl z-20">
+          <div class="font-serif text-4xl text-ink-900 font-bold">5+</div>
+          <div class="text-ink-700 text-xs font-semibold tracking-widest uppercase mt-1">лет опыта</div>
+        </div>
+      </div>
+
+      <!-- Text column -->
+      <div class="fade-up" style="transition-delay:0.15s">
+        <div class="tag-badge inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs tracking-widest uppercase mb-6">
+          <i data-lucide="heart" class="w-3 h-3"></i>
+          Обо мне
+        </div>
+        <h2 class="font-serif text-4xl lg:text-5xl text-beige-50 leading-tight mb-6">
+          Привет, я Анна —<br /><em class="text-beige-400 not-italic">ваш личный стилист</em><br />и мастер пошива
+        </h2>
+        <p class="text-ink-300 leading-relaxed mb-5">
+          Я шью одежду с любовью уже более пяти лет. Начинала с небольших заказов для подруг, а сейчас в моём портфолио сотни уникальных изделий — от повседневных образов до свадебных платьев.
+        </p>
+        <p class="text-ink-300 leading-relaxed mb-8">
+          Каждое изделие для меня — это возможность воплотить вашу мечту. Я работаю только с качественными тканями, уделяю внимание каждой детали и всегда учитываю ваши пожелания.
+        </p>
+
+        <!-- Values -->
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-full border border-beige-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <i data-lucide="check" class="w-3.5 h-3.5 text-beige-500"></i>
+            </div>
+            <div>
+              <div class="text-beige-200 text-sm font-medium">Индивидуальный подход</div>
+              <div class="text-ink-400 text-xs mt-0.5">Под вашу фигуру</div>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-full border border-beige-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <i data-lucide="check" class="w-3.5 h-3.5 text-beige-500"></i>
+            </div>
+            <div>
+              <div class="text-beige-200 text-sm font-medium">Точные сроки</div>
+              <div class="text-ink-400 text-xs mt-0.5">Всегда вовремя</div>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-full border border-beige-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <i data-lucide="check" class="w-3.5 h-3.5 text-beige-500"></i>
+            </div>
+            <div>
+              <div class="text-beige-200 text-sm font-medium">Качественные ткани</div>
+              <div class="text-ink-400 text-xs mt-0.5">Лучшие материалы</div>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-full border border-beige-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <i data-lucide="check" class="w-3.5 h-3.5 text-beige-500"></i>
+            </div>
+            <div>
+              <div class="text-beige-200 text-sm font-medium">Поддержка клиента</div>
+              <div class="text-ink-400 text-xs mt-0.5">На каждом этапе</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVICES ===== -->
+  <section id="services" class="py-28 fabric-accent">
+    <div class="max-w-[1440px] mx-auto px-8 lg:px-16">
+      <!-- Heading -->
+      <div class="text-center mb-16 fade-up">
+        <div class="tag-badge inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs tracking-widest uppercase mb-6">
+          <i data-lucide="sparkles" class="w-3 h-3"></i>
+          Что я делаю
+        </div>
+        <h2 class="font-serif text-4xl lg:text-5xl text-beige-50 mb-4">Мои услуги</h2>
+        <div class="divider-line mx-auto mt-4"></div>
+      </div>
+
+      <!-- Cards grid -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Card 1 -->
+        <div class="service-card rounded-2xl p-8 fade-up" style="transition-delay:0.05s">
+          <div class="w-12 h-12 rounded-xl bg-beige-600 bg-opacity-10 border border-beige-600 border-opacity-20 flex items-center justify-center mb-6">
+            <i data-lucide="star" class="w-5 h-5 text-beige-500"></i>
+          </div>
+          <h3 class="font-serif text-xl text-beige-100 mb-3">Платья на заказ</h3>
+          <p class="text-ink-300 text-sm leading-relaxed mb-6">Вечерние, коктейльные, свадебные — любой стиль и силуэт. Создаём образ мечты от эскиза до готового изделия.</p>
+          <div class="flex items-center justify-between pt-4 border-t border-ink-700">
+            <span class="text-beige-400 text-sm font-medium">от 8 000 ₽</span>
+            <span class="text-ink-500 text-xs">14–21 день</span>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="service-card rounded-2xl p-8 fade-up" style="transition-delay:0.1s">
+          <div class="w-12 h-12 rounded-xl bg-beige-600 bg-opacity-10 border border-beige-600 border-opacity-20 flex items-center justify-center mb-6">
+            <i data-lucide="shirt" class="w-5 h-5 text-beige-500"></i>
+          </div>
+          <h3 class="font-serif text-xl text-beige-100 mb-3">Повседневная одежда</h3>
+          <p class="text-ink-300 text-sm leading-relaxed mb-6">Брюки, юбки, блузы, жакеты — базовый гардероб, пошитый точно под вашу фигуру. Удобно и стильно каждый день.</p>
+          <div class="flex items-center justify-between pt-4 border-t border-ink-700">
+            <span class="text-beige-400 text-sm font-medium">от 3 500 ₽</span>
+            <span class="text-ink-500 text-xs">7–14 дней</span>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="service-card rounded-2xl p-8 fade-up" style="transition-delay:0.15s">
+          <div class="w-12 h-12 rounded-xl bg-beige-600 bg-opacity-10 border border-beige-600 border-opacity-20 flex items-center justify-center mb-6">
+            <i data-lucide="gem" class="w-5 h-5 text-beige-500"></i>
+          </div>
+          <h3 class="font-serif text-xl text-beige-100 mb-3">Свадебные платья</h3>
+          <p class="text-ink-300 text-sm leading-relaxed mb-6">Самый важный день в жизни — самое особенное платье. Работаем с кружевом, шелком, органзой и любыми деталями.</p>
+          <div class="flex items-center justify-between pt-4 border-t border-ink-700">
+            <span class="text-beige-400 text-sm font-medium">от 25 000 ₽</span>
+            <span class="text-ink-500 text-xs">30–45 дней</span>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="service-card rounded-2xl p-8 fade-up" style="transition-delay:0.2s">
+          <div class="w-12 h-12 rounded-xl bg-beige-600 bg-opacity-10 border border-beige-600 border-opacity-20 flex items-center justify-center mb-6">
+            <i data-lucide="scissors" class="w-5 h-5 text-beige-500"></i>
+          </div>
+          <h3 class="font-serif text-xl text-beige-100 mb-3">Ремонт и подгонка</h3>
+          <p class="text-ink-300 text-sm leading-relaxed mb-6">Любимая вещь стала не по размеру? Подошьём, ушьём, исправим — вернём идеальную посадку любому изделию.</p>
+          <div class="flex items-center justify-between pt-4 border-t border-ink-700">
+            <span class="text-beige-400 text-sm font-medium">от 500 ₽</span>
+            <span class="text-ink-500 text-xs">1–5 дней</span>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="service-card rounded-2xl p-8 fade-up" style="transition-delay:0.25s">
+          <div class="w-12 h-12 rounded-xl bg-beige-600 bg-opacity-10 border border-beige-600 border-opacity-20 flex items-center justify-center mb-6">
+            <i data-lucide="palette" class="w-5 h-5 text-beige-500"></i>
+          </div>
+          <h3 class="font-serif text-xl text-beige-100 mb-3">Детская одежда</h3>
+          <p class="text-ink-300 text-sm leading-relaxed mb-6">Безопасные ткани, точный пошив — красивые наряды для праздников или повседневной жизни вашего ребёнка.</p>
+          <div class="flex items-center justify-between pt-4 border-t border-ink-700">
+            <span class="text-beige-400 text-sm font-medium">от 2 000 ₽</span>
+            <span class="text-ink-500 text-xs">7–10 дней</span>
+          </div>
+        </div>
+
+        <!-- Card 6 — CTA card -->
+        <div class="rounded-2xl p-8 fade-up relative overflow-hidden" style="transition-delay:0.3s; background: linear-gradient(135deg, #a8804a 0%, #c09a60 50%, #dfc9a8 100%)">
+          <div class="absolute inset-0 fabric-accent opacity-20"></div>
+          <div class="relative z-10">
+            <h3 class="font-serif text-2xl text-ink-900 mb-3">Не нашли нужное?</h3>
+            <p class="text-ink-700 text-sm leading-relaxed mb-6">Свяжитесь со мной — обсудим любую идею и воплотим её в жизнь.</p>
+            <a href="#contact" class="inline-flex items-center gap-2 bg-ink-900 text-beige-200 px-6 py-3 rounded-full text-sm font-semibold tracking-wide hover:bg-ink-800 transition-colors">
+              Написать мне
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PORTFOLIO ===== -->
+  <section id="portfolio" class="py-28">
+    <div class="max-w-[1440px] mx-auto px-8 lg:px-16">
+      <!-- Heading -->
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-16 fade-up gap-6">
+        <div>
+          <div class="tag-badge inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs tracking-widest uppercase mb-6">
+            <i data-lucide="image" class="w-3 h-3"></i>
+            Мои работы
+          </div>
+          <h2 class="font-serif text-4xl lg:text-5xl text-beige-50">Портфолио</h2>
+          <div class="divider-line mt-4"></div>
+        </div>
+        <p class="text-ink-300 max-w-sm leading-relaxed">Каждое изделие — это уникальная история. Посмотрите на мои последние работы.</p>
+      </div>
+
+      <!-- Portfolio grid -->
+      <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+
+        <!-- Large item -->
+        <div class="portfolio-item rounded-2xl col-span-2 lg:col-span-1 lg:row-span-2 h-64 lg:h-auto fade-up" style="min-height:320px; transition-delay:0.05s">
+          <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=700&q=80&fit=crop" alt="Вечернее платье" />
+          <div class="portfolio-overlay">
+            <div>
+              <div class="text-beige-200 font-serif text-lg">Вечернее платье</div>
+              <div class="text-ink-400 text-xs mt-1">Шёлк, ручная вышивка</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="portfolio-item rounded-2xl h-56 fade-up" style="transition-delay:0.1s">
+          <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80&fit=crop" alt="Летний образ" />
+          <div class="portfolio-overlay">
+            <div>
+              <div class="text-beige-200 font-serif text-lg">Летний образ</div>
+              <div class="text-ink-400 text-xs mt-1">Лён, натуральные ткани</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="portfolio-item rounded-2xl h-56 fade-up" style="transition-delay:0.15s">
+          <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&q=80&fit=crop" alt="Свадебное платье" />
+          <div class="portfolio-overlay">
+            <div>
+              <div class="text-beige-200 font-serif text-lg">Свадебное платье</div>
+              <div class="text-ink-400 text-xs mt-1">Кружево, органза</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="portfolio-item rounded-2xl h-56 fade-up" style="transition-delay:0.2s">
+          <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&q=80&fit=crop" alt="Деловой стиль" />
+          <div class="portfolio-overlay">
+            <div>
+              <div class="text-beige-200 font-serif text-lg">Деловой образ</div>
+              <div class="text-ink-400 text-xs mt-1">Костюмная ткань</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="portfolio-item rounded-2xl h-56 fade-up" style="transition-delay:0.25s">
+          <img src="https://images.unsplash.com/photo-1594938298603-c8148c4b4463?w=600&q=80&fit=crop" alt="Коктейльное платье" />
+          <div class="portfolio-overlay">
+            <div>
+              <div class="text-beige-200 font-serif text-lg">Коктейльное платье</div>
+              <div class="text-ink-400 text-xs mt-1">Бархат, декор</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROCESS ===== -->
+  <section id="process" class="py-28 fabric-accent">
+    <div class="max-w-[1440px] mx-auto px-8 lg:px-16">
+      <!-- Heading -->
+      <div class="text-center mb-20 fade-up">
+        <div class="tag-badge inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs tracking-widest uppercase mb-6">
+          <i data-lucide="list-ordered" class="w-3 h-3"></i>
+          Процесс работы
+        </div>
+        <h2 class="font-serif text-4xl lg:text-5xl text-beige-50 mb-4">Как это работает</h2>
+        <p class="text-ink-300 max-w-lg mx-auto">Всего четыре шага от вашей идеи до готового изделия</p>
+        <div class="divider-line mx-auto mt-6"></div>
+      </div>
+
+      <!-- Steps -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        <div class="service-card rounded-2xl p-8 relative fade-up" style="transition-delay:0.05s">
+          <span class="step-number">01</span>
+          <div class="relative z-10">
+            <div class="w-12 h-12 rounded-full border border-beige-600 flex items-center justify-center mb-6 mt-8">
+              <i data-lucide="message-circle" class="w-5 h-5 text-beige-500"></i>
+            </div>
+            <h3 class="font-serif text-xl text-beige-100 mb-3">Консультация</h3>
+            <p class="text-ink-300 text-sm leading-relaxed">Обсуждаем ваши идеи, пожелания по стилю, ткани и бюджету. Всё это можно сделать онлайн.</p>
+          </div>
+        </div>
+
+        <div class="service-card rounded-2xl p-8 relative fade-up" style="transition-delay:0.1s">
+          <span class="step-number">02</span>
+          <div class="relative z-10">
+            <div class="w-12 h-12 rounded-full border border-beige-600 flex items-center justify-center mb-6 mt-8">
+              <i data-lucide="ruler" class="w-5 h-5 text-beige-500"></i>
+            </div>
+            <h3 class="font-serif text-xl text-beige-100 mb-3">Замеры</h3>
+            <p class="text-ink-300 text-sm leading-relaxed">Снимаем все необходимые мерки. Если вы в другом городе — высылаю подробную инструкцию.</p>
+          </div>
+        </div>
+
+        <div class="service-card rounded-2xl p-8 relative fade-up" style="transition-delay:0.15s">
+          <span class="step-number">03</span>
+          <div class="relative z-10">
+            <div class="w-12 h-12 rounded-full border border-beige-600 flex items-center justify-center mb-6 mt-8">
+              <i data-lucide="scissors" class="w-5 h-5 text-beige-500"></i>
+            </div>
+            <h3 class="font-serif text-xl text-beige-100 mb-3">Пошив</h3>
+            <p class="text-ink-300 text-sm leading-relaxed">Создаю выкройку, кроим и шьём. Делаю примерку (лично или по видео) для идеальной посадки.</p>
+          </div>
+        </div>
+
+        <div class="service-card rounded-2xl p-8 relative fade-up" style="transition-delay:0.2s">
+          <span class="step-number">04</span>
+          <div class="relative z-10">
+            <div class="w-12 h-12 rounded-full border border-beige-600 flex items-center justify-center mb-6 mt-8">
+              <i data-lucide="package" class="w-5 h-5 text-beige-500"></i>
+            </div>
+            <h3 class="font-serif text-xl text-beige-100 mb-3">Доставка</h3>
+            <p class="text-ink-300 text-sm leading-relaxed">Бережно упаковываю и отправляю. Работаем по всей России. Самовывоз — бесплатно.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TESTIMONIALS ===== -->
+  <section id="testimonials" class="py-28">
+    <div class="max-w-[1440px] mx-auto px-8 lg:px-16">
+      <!-- Heading -->
+      <div class="text-center mb-16 fade-up">
+        <div class="tag-badge inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs tracking-widest uppercase mb-6">
+          <i data-lucide="quote" class="w-3 h-3"></i>
+          Отзывы
+        </div>
+        <h2 class="font-serif text-4xl lg:text-5xl text-beige-50 mb-4">Что говорят клиенты</h2>
+        <div class="divider-line mx-auto mt-4"></div>
+      </div>
+
+      <!-- Testimonials grid -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <div class="testimonial-card rounded-2xl p-8 fade-up" style="transition-delay:0.05s">
+          <div class="flex items-center gap-1 mb-4" id="stars-1"></div>
+          <p class="text-ink-300 text-sm leading-relaxed mb-6 italic">"Анна сшила мне платье на выпускной — просто мечта! Учла все мои пожелания, подогнала идеально под фигуру. Все спрашивали, где я купила такое платье!"</p>
+          <div class="flex items-center gap-3 pt-4 border-t border-ink-700">
+            <img src="https://i.pravatar.cc/48?img=1" alt="Алина" class="w-10 h-10 rounded-full object-cover" />
+            <div>
+              <div class="text-beige-200 text-sm font-semibold">Алина К.</div>
+              <div class="text-ink-500 text-xs">Выпускное платье</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card rounded-2xl p-8 fade-up" style="transition-delay:0.1s">
+          <div class="flex items-center gap-1 mb-4" id="stars-2"></div>
+          <p class="text-ink-300 text-sm leading-relaxed mb-6 italic">"Заказывала свадебное платье — это было что-то невероятное! Полное погружение в процесс, постоянная связь, три примерки. Результат превзошёл все ожидания."</p>
+          <div class="flex items-center gap-3 pt-4 border-t border-ink-700">
+            <img src="https://i.pravatar.cc/48?img=5" alt="Мария" class="w-10 h-10 rounded-full object-cover" />
+            <div>
+              <div class="text-beige-200 text-sm font-semibold">Мария В.</div>
+              <div class="text-ink-500 text-xs">Свадебное платье</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card rounded-2xl p-8 fade-up" style="transition-delay:0.15s">
+          <div class="flex items-center gap-1 mb-4" id="stars-3"></div>
+          <p class="text-ink-300 text-sm leading-relaxed mb-6 italic">"Заказывала деловой костюм. Теперь хожу на работу с удовольствием — вещи сидят идеально! Уже жду следующего заказа. Очень рекомендую всем своим подругам."</p>
+          <div class="flex items-center gap-3 pt-4 border-t border-ink-700">
+            <img src="https://i.pravatar.cc/48?img=9" alt="Юлия" class="w-10 h-10 rounded-full object-cover" />
+            <div>
+              <div class="text-beige-200 text-sm font-semibold">Юлия Н.</div>
+              <div class="text-ink-500 text-xs">Деловой костюм</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card rounded-2xl p-8 fade-up" style="transition-delay:0.2s">
+          <div class="flex items-center gap-1 mb-4" id="stars-4"></div>
+          <p class="text-ink-300 text-sm leading-relaxed mb-6 italic">"Обращалась по поводу детского платья для праздника. Сделали быстро и очень качественно! Доченька была в восторге, и я тоже. Обязательно вернусь."</p>
+          <div class="flex items-center gap-3 pt-4 border-t border-ink-700">
+            <img src="https://i.pravatar.cc/48?img=20" alt="Екатерина" class="w-10 h-10 rounded-full object-cover" />
+            <div>
+              <div class="text-beige-200 text-sm font-semibold">Екатерина С.</div>
+              <div class="text-ink-500 text-xs">Детское платье</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card rounded-2xl p-8 fade-up" style="transition-delay:0.25s">
+          <div class="flex items-center gap-1 mb-4" id="stars-5"></div>
+          <p class="text-ink-300 text-sm leading-relaxed mb-6 italic">"Приходила на ремонт пальто — укорачивали рукава и подгоняли по фигуре. Сделано аккуратно и в срок. Цена адекватная. Буду заказывать что-то с нуля."</p>
+          <div class="flex items-center gap-3 pt-4 border-t border-ink-700">
+            <img src="https://i.pravatar.cc/48?img=15" alt="Ольга" class="w-10 h-10 rounded-full object-cover" />
+            <div>
+              <div class="text-beige-200 text-sm font-semibold">Ольга Т.</div>
+              <div class="text-ink-500 text-xs">Ремонт пальто</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card rounded-2xl p-8 fade-up" style="transition-delay:0.3s">
+          <div class="flex items-center gap-1 mb-4" id="stars-6"></div>
+          <p class="text-ink-300 text-sm leading-relaxed mb-6 italic">"Это уже третий мой заказ! Каждый раз — на высоте. Анна очень внимательна к деталям, подбирает ткань, советует по фасону. Настоящий профессионал!"</p>
+          <div class="flex items-center gap-3 pt-4 border-t border-ink-700">
+            <img src="https://i.pravatar.cc/48?img=32" alt="Светлана" class="w-10 h-10 rounded-full object-cover" />
+            <div>
+              <div class="text-beige-200 text-sm font-semibold">Светлана Д.</div>
+              <div class="text-ink-500 text-xs">Постоянный клиент</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA BANNER ===== -->
+  <section class="cta-section py-28 fade-up">
+    <div class="max-w-[1440px] mx-auto px-8 lg:px-16 text-center">
+      <div class="max-w-2xl mx-auto">
+        <div class="w-16 h-16 rounded-full border border-beige-600 flex items-center justify-center mx-auto mb-8">
+          <i data-lucide="scissors" class="w-7 h-7 text-beige-500"></i>
+        </div>
+        <h2 class="font-serif text-4xl lg:text-6xl text-beige-50 leading-tight mb-6">
+          Готовы создать<br /><em class="text-beige-400 not-italic">идеальный образ?</em>
+        </h2>
+        <p class="text-ink-300 text-lg mb-10 leading-relaxed">
+          Напишите мне прямо сейчас — обсудим вашу идею и рассчитаем стоимость бесплатно.
+        </p>
+        <a href="#contact" class="btn-gold inline-flex items-center gap-3 px-10 py-5 rounded-full text-base font-semibold tracking-wide cursor-pointer">
+          <i data-lucide="mail" class="w-5 h-5"></i>
+          Написать мне
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact" class="py-28">
+    <div class="max-w-[1440px] mx-auto px-8 lg:px-16">
+      <div class="grid lg:grid-cols-2 gap-16 items-start">
+
+        <!-- Left -->
+        <div class="fade-up">
+          <div class="tag-badge inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs tracking-widest uppercase mb-6">
+            <i data-lucide="send" class="w-3 h-3"></i>
+            Связаться
+          </div>
+          <h2 class="font-serif text-4xl lg:text-5xl text-beige-50 leading-tight mb-6">
+            Обсудим ваш<br /><em class="text-beige-400 not-italic">проект</em>
+          </h2>
+          <p class="text-ink-300 leading-relaxed mb-10">
+            Заполните форму или напишите мне в мессенджер — отвечу в течение нескольких часов и расскажу обо всех деталях.
+          </p>
+
+          <!-- Contacts -->
+          <div class="flex flex-col gap-5">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-full border border-ink-700 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="phone" class="w-4 h-4 text-beige-500"></i>
+              </div>
+              <div>
+                <div class="text-ink-400 text-xs tracking-wide mb-0.5">Телефон / WhatsApp</div>
+                <a href="tel:+79001234567" class="text-beige-200 text-sm hover:text-beige-400 transition-colors">+7 (900) 123-45-67</a>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-full border border-ink-700 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="instagram" class="w-4 h-4 text-beige-500"></i>
+              </div>
+              <div>
+                <div class="text-ink-400 text-xs tracking-wide mb-0.5">Instagram</div>
+                <a href="#" class="text-beige-200 text-sm hover:text-beige-400 transition-colors">@atelier_anna</a>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-full border border-ink-700 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="map-pin" class="w-4 h-4 text-beige-500"></i>
+              </div>
+              <div>
+                <div class="text-ink-400 text-xs tracking-wide mb-0.5">Адрес</div>
+                <span class="text-beige-200 text-sm">Москва, ул. Тверская, 12</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div class="fade-up" style="transition-delay:0.15s">
+          <form id="contact-form" class="bg-ink-800 rounded-2xl border border-ink-700 p-8 flex flex-col gap-5" novalidate>
+            <div class="grid sm:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-ink-300 text-xs tracking-wide mb-2 uppercase">Ваше имя</label>
+                <input type="text" id="form-name" placeholder="Анна" class="form-input w-full px-4 py-3 rounded-xl text-sm" />
+              </div>
+              <div>
+                <label class="block text-ink-300 text-xs tracking-wide mb-2 uppercase">Телефон / Telegram</label>
+                <input type="text" id="form-phone" placeholder="+7 (___) ___-__-__" class="form-input w-full px-4 py-3 rounded-xl text-sm" />
+              </div>
+            </div>
+            <div>
+              <label class="block text-ink-300 text-xs tracking-wide mb-2 uppercase">Тип изделия</label>
+              <select id="form-type" class="form-input w-full px-4 py-3 rounded-xl text-sm appearance-none cursor-pointer">
+                <option value="" disabled selected style="color:#5a5a5a">Выберите категорию...</option>
+                <option>Платье</option>
+                <option>Свадебное платье</option>
+                <option>Повседневная одежда</option>
+                <option>Детская одежда</option>
+                <option>Ремонт / подгонка</option>
+                <option>Другое</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-ink-300 text-xs tracking-wide mb-2 uppercase">Расскажите о вашей идее</label>
+              <textarea id="form-message" rows="4" placeholder="Опишите, что вы хотите заказать, укажите детали, стиль, ткань..." class="form-input w-full px-4 py-3 rounded-xl text-sm resize-none"></textarea>
+            </div>
+            <button type="submit" id="form-submit" class="btn-gold w-full py-4 rounded-xl text-sm font-semibold tracking-wide flex items-center justify-center gap-2 mt-2">
+              <i data-lucide="send" class="w-4 h-4"></i>
+              Отправить заявку
+            </button>
+            <!-- Success message -->
+            <div id="form-success" class="hidden text-center py-4">
+              <div class="w-12 h-12 rounded-full bg-beige-600 bg-opacity-10 border border-beige-600 flex items-center justify-center mx-auto mb-3">
+                <i data-lucide="check" class="w-5 h-5 text-beige-500"></i>
+              </div>
+              <div class="text-beige-200 font-medium">Заявка отправлена!</div>
+              <div class="text-ink-400 text-xs mt-1">Свяжусь с вами в ближайшее время</div>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="border-t border-ink-700 py-12">
+    <div class="max-w-[1440px] mx-auto px-8 lg:px-16">
+      <div class="flex flex-col lg:flex-row items-center justify-between gap-8">
+        <!-- Logo -->
+        <a href="#hero" class="flex items-center gap-3 group">
+          <div class="w-7 h-7 border border-beige-500 rotate-45 flex items-center justify-center">
+            <div class="w-1.5 h-1.5 bg-beige-500 rotate-45"></div>
+          </div>
+          <span class="font-serif text-lg text-beige-100 tracking-widest uppercase">Atelier</span>
+        </a>
+        <!-- Nav -->
+        <nav class="flex flex-wrap items-center justify-center gap-8">
+          <a href="#services" class="text-ink-400 text-sm hover:text-beige-300 transition-colors">Услуги</a>
+          <a href="#portfolio" class="text-ink-400 text-sm hover:text-beige-300 transition-colors">Работы</a>
+          <a href="#process" class="text-ink-400 text-sm hover:text-beige-300 transition-colors">Процесс</a>
+          <a href="#testimonials" class="text-ink-400 text-sm hover:text-beige-300 transition-colors">Отзывы</a>
+          <a href="#contact" class="text-ink-400 text-sm hover:text-beige-300 transition-colors">Контакты</a>
+        </nav>
+        <!-- Socials -->
+        <div class="flex items-center gap-4">
+          <a href="#" class="w-9 h-9 rounded-full border border-ink-700 flex items-center justify-center hover:border-beige-600 hover:text-beige-400 text-ink-400 transition-all">
+            <i data-lucide="instagram" class="w-4 h-4"></i>
+          </a>
+          <a href="#" class="w-9 h-9 rounded-full border border-ink-700 flex items-center justify-center hover:border-beige-600 hover:text-beige-400 text-ink-400 transition-all">
+            <i data-lucide="send" class="w-4 h-4"></i>
+          </a>
+          <a href="#" class="w-9 h-9 rounded-full border border-ink-700 flex items-center justify-center hover:border-beige-600 hover:text-beige-400 text-ink-400 transition-all">
+            <i data-lucide="phone" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+      <!-- Bottom -->
+      <div class="mt-8 pt-8 border-t border-ink-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-ink-500 text-xs">© 2024 Atelier Anna. Все права защищены.</p>
+        <p class="text-ink-600 text-xs">Индивидуальный пошив одежды · Москва</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script>
+    // Central click delegation
+    const clickActions = {
+      'mobile-menu-btn': () => toggleMobileMenu(),
+      'form-submit':     (e) => handleFormSubmit(e),
+    };
+
+    document.addEventListener('click', (e) => {
+      const el = e.target.closest('[id]');
+      if (!el) return;
+      const fn = clickActions[el.id];
+      if (fn) fn(e, el);
+
+      // Close mobile menu when nav link clicked
+      if (e.target.closest('.mobile-nav-link')) {
+        closeMobileMenu();
+      }
+    });
+
+    // ---- Mobile menu ----
+    let menuOpen = false;
+    function toggleMobileMenu() {
+      menuOpen = !menuOpen;
+      const menu = document.getElementById('mobile-menu');
+      const l1   = document.getElementById('burger-line-1');
+      const l2   = document.getElementById('burger-line-2');
+      const l3   = document.getElementById('burger-line-3');
+      if (menuOpen) {
+        menu.classList.remove('hidden');
+        l1.style.transform = 'translateY(6px) rotate(45deg)';
+        l2.style.opacity   = '0';
+        l3.style.transform = 'translateY(-6px) rotate(-45deg)';
+        l3.style.width     = '24px';
+      } else {
+        closeMobileMenu();
+      }
+    }
+    function closeMobileMenu() {
+      menuOpen = false;
+      const menu = document.getElementById('mobile-menu');
+      const l1   = document.getElementById('burger-line-1');
+      const l2   = document.getElementById('burger-line-2');
+      const l3   = document.getElementById('burger-line-3');
+      menu.classList.add('hidden');
+      l1.style.transform = '';
+      l2.style.opacity   = '1';
+      l3.style.transform = '';
+      l3.style.width     = '16px';
+    }
+
+    // ---- Navbar scroll effect ----
+    const navbar = document.getElementById('navbar');
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (y > 60) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+      lastScroll = y;
+    }, { passive: true });
+
+    // ---- Fade-up on scroll ----
+    const fadeEls = document.querySelectorAll('.fade-up');
+    const ioOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, ioOptions);
+    fadeEls.forEach(el => io.observe(el));
+
+    // ---- Star ratings ----
+    function renderStars(containerId, count) {
+      const el = document.getElementById(containerId);
+      if (!el) return;
+      let html = '';
+      for (let i = 0; i < 5; i++) {
+        html += '<i data-lucide="star" class="w-3.5 h-3.5 ' + (i < count ? 'text-beige-500' : 'text-ink-600') + '"></i>';
+      }
+      el.innerHTML = html;
+    }
+
+    // ---- Marquee content ----
+    function renderMarquee(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const items = [
+        '✦ Индивидуальный пошив',
+        '✦ Свадебные платья',
+        '✦ Повседневная одежда',
+        '✦ Ремонт и подгонка',
+        '✦ Детская одежда',
+        '✦ Вечерние платья',
+        '✦ Деловой стиль',
+        '✦ Только ручная работа',
+      ];
+      el.innerHTML = items.join('&nbsp;&nbsp;&nbsp;&nbsp;');
+    }
+
+    // ---- Form submit ----
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const name    = document.getElementById('form-name').value.trim();
+      const phone   = document.getElementById('form-phone').value.trim();
+      if (!name || !phone) {
+        document.getElementById('form-name').style.borderColor  = !name  ? '#ef4444' : '';
+        document.getElementById('form-phone').style.borderColor = !phone ? '#ef4444' : '';
+        return;
+      }
+      const form    = document.getElementById('contact-form');
+      const success = document.getElementById('form-success');
+      // Hide form fields, show success
+      Array.from(form.children).forEach(child => {
+        if (child.id !== 'form-success') child.style.display = 'none';
+      });
+      success.classList.remove('hidden');
+    }
+
+    // ---- Init ----
+    document.addEventListener('DOMContentLoaded', () => {
+      renderMarquee('marquee-content');
+      renderMarquee('marquee-content-2');
+      renderStars('stars-1', 5);
+      renderStars('stars-2', 5);
+      renderStars('stars-3', 5);
+      renderStars('stars-4', 5);
+      renderStars('stars-5', 5);
+      renderStars('stars-6', 5);
+
+      // Trigger fade-up for elements already in viewport
+      setTimeout(() => {
+        fadeEls.forEach(el => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight) {
+            el.classList.add('visible');
+          }
+        });
+      }, 100);
+    });
+  </script>
+
+  <script>lucide.createIcons();</script>
+</body>
+</html>
